@@ -35,6 +35,7 @@ func NewRouter(conn *sql.DB) *gin.Engine {
 	api := r.Group("/api")
 	{
 		api.GET("/health", handlers.Health)
+		api.POST("/scan", handlers.Scan)
 	}
 
 	return r
