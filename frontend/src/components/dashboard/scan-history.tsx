@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ApiError, getScan, listScans, type Scan, type ScanResult } from "@/lib/api";
 import { compareScans, type ScanComparison } from "@/lib/scan-comparison";
@@ -66,7 +67,7 @@ export function ScanHistory({ onViewScan }: ScanHistoryProps) {
   return (
     <div className="flex flex-col gap-4">
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
+        <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <CardTitle className="text-base">Scan History</CardTitle>
           <Button size="sm" disabled={selected.length !== 2 || comparing} onClick={handleCompare}>
             {comparing ? "Comparing..." : "Compare Selected"}
@@ -75,7 +76,11 @@ export function ScanHistory({ onViewScan }: ScanHistoryProps) {
         <CardContent>
           {error && <p className="mb-2 text-sm text-destructive">{error}</p>}
           {loading ? (
-            <p className="text-sm text-muted-foreground">Loading...</p>
+            <div className="flex flex-col gap-2">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <Skeleton key={i} className="h-9 w-full" />
+              ))}
+            </div>
           ) : scans.length === 0 ? (
             <p className="text-sm text-muted-foreground">No scans yet. Run one from the Scan tab.</p>
           ) : (
