@@ -5,6 +5,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/ca
 import { ScanForm } from "@/components/dashboard/scan-form";
 import { OverviewCards } from "@/components/dashboard/overview-cards";
 import { DashboardCharts } from "@/components/dashboard/dashboard-charts";
+import { FileTable } from "@/components/dashboard/file-table";
 import type { ScanResult } from "@/lib/api";
 
 export default function Home() {
@@ -25,6 +26,7 @@ export default function Home() {
         <>
           <OverviewCards scan={result.scan} files={result.files} />
           <DashboardCharts files={result.files} />
+          <FileTable files={result.files} />
         </>
       ) : (
         <Card className="max-w-md">
