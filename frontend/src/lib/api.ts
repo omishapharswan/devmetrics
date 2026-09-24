@@ -43,17 +43,28 @@ export class ApiError extends Error {
   }
 }
 
-export async function runScan(folderPath: string): Promise<ScanResult> {
-  const res = await fetch(`${API_BASE_URL}/api/scan`, {
+async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  const res = await fetch(`${API_BASE_URL}${path}`, init);
+  if (!res.ok) {
+    const body = await res.json().catch(() => null);
+    throw new ApiError(body?.error ?? `Request failed with status ${res.status}`);
+  }
+  return res.json();
+}
+
+export function runScan(folderPath: string): Promise<ScanResult> {
+  return request<ScanResult>("/api/scan", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ folderPath }),
   });
+}
 
-  if (!res.ok) {
-    const body = await res.json().catch(() => null);
-    throw new ApiError(body?.error ?? `Scan failed with status ${res.status}`);
-  }
+export async function listScans(): Promise<Scan[]> {
+  const { scans } = await request<{ scans: Scan[] }>("/api/scans");
+  return scans;
+}
 
-  return res.json();
+export function getScan(id: number): Promise<ScanResult> {
+  return request<ScanResult>(`/api/scans/${id}`);
 }
