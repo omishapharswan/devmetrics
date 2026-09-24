@@ -26,14 +26,14 @@ logic (parsing, counting, graph building) in Go.
 
 ## Tech Stack
 
-| Layer         | Technology                                   |
-|---------------|-----------------------------------------------|
-| Backend       | Go (Gin)                                       |
-| Database      | SQLite (file-based)                            |
-| Frontend      | Next.js (App Router) + React + TypeScript      |
-| UI components | Tailwind CSS + shadcn/ui                       |
-| Charts        | Recharts (via shadcn/ui's chart component)     |
-| 3D graph      | Three.js via React Three Fiber (+ drei)        |
+| Layer         | Technology                                                                |
+|---------------|----------------------------------------------------------------------------|
+| Backend       | Go (Gin)                                                                  |
+| Database      | SQLite (file-based)                                                       |
+| Frontend      | Next.js (App Router) + React + TypeScript                                |
+| UI components | Tailwind CSS + shadcn/ui                                                  |
+| Charts        | Recharts (via shadcn/ui's chart component)                               |
+| 3D graph      | Three.js via React Three Fiber (+ drei)                                  |
 | Testing       | Go's testing package (backend); Vitest + React Testing Library (frontend) |
 
 ## Project Structure
