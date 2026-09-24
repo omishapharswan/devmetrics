@@ -6,6 +6,7 @@ import { ScanForm } from "@/components/dashboard/scan-form";
 import { OverviewCards } from "@/components/dashboard/overview-cards";
 import { DashboardCharts } from "@/components/dashboard/dashboard-charts";
 import { FileTable } from "@/components/dashboard/file-table";
+import { DependencyGraph3D } from "@/components/dashboard/dependency-graph-3d";
 import type { ScanResult } from "@/lib/api";
 
 export default function Home() {
@@ -26,6 +27,7 @@ export default function Home() {
         <>
           <OverviewCards scan={result.scan} files={result.files} />
           <DashboardCharts files={result.files} />
+          <DependencyGraph3D files={result.files} dependencies={result.dependencies} />
           <FileTable files={result.files} />
         </>
       ) : (

@@ -19,10 +19,12 @@ import (
 var ErrFolderNotFound = errors.New("folder not found")
 
 // ScanResult is the response returned to callers of RunScan: the scan
-// summary row plus the per-file metrics computed for it.
+// summary row plus the per-file metrics and dependency edges computed
+// for it.
 type ScanResult struct {
-	Scan  models.Scan   `json:"scan"`
-	Files []models.File `json:"files"`
+	Scan         models.Scan         `json:"scan"`
+	Files        []models.File       `json:"files"`
+	Dependencies []models.Dependency `json:"dependencies"`
 }
 
 // fileMetrics holds every value computed for one file before it is
@@ -177,18 +179,30 @@ func persistScan(
 		}
 	}
 
+	dependencies := make([]models.Dependency, 0, len(depEdges))
 	for _, e := range depEdges {
 		fromID, fromOK := relPathToID[e.FromRelPath]
 		toID, toOK := relPathToID[e.ToRelPath]
 		if !fromOK || !toOK {
 			continue
 		}
-		if _, err := tx.Exec(
+		res, err := tx.Exec(
 			`INSERT INTO dependencies (scan_id, from_file_id, to_file_id) VALUES (?, ?, ?)`,
 			scanID, fromID, toID,
-		); err != nil {
+		)
+		if err != nil {
 			return nil, fmt.Errorf("insert dependency edge: %w", err)
 		}
+		depID, err := res.LastInsertId()
+		if err != nil {
+			return nil, fmt.Errorf("read dependency id: %w", err)
+		}
+		dependencies = append(dependencies, models.Dependency{
+			ID:         depID,
+			ScanID:     scanID,
+			FromFileID: fromID,
+			ToFileID:   toID,
+		})
 	}
 
 	var avgComplexity, avgHealthScore float64
@@ -228,6 +242,7 @@ func persistScan(
 			AvgComplexity:  avgComplexity,
 			AvgHealthScore: avgHealthScore,
 		},
-		Files: files,
+		Files:        files,
+		Dependencies: dependencies,
 	}, nil
 }

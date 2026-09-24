@@ -77,6 +77,21 @@ func TestRunScanEndToEnd(t *testing.T) {
 	} else {
 		dependencyEdgeFound = true
 	}
+
+	if len(result.Dependencies) != 1 {
+		t.Fatalf("expected 1 dependency edge in result, got %d: %+v", len(result.Dependencies), result.Dependencies)
+	}
+	dep := result.Dependencies[0]
+	if dep.ScanID != result.Scan.ID {
+		t.Errorf("dependency ScanID = %d, want %d", dep.ScanID, result.Scan.ID)
+	}
+	idByPath := map[string]int64{}
+	for _, f := range result.Files {
+		idByPath[f.Path] = f.ID
+	}
+	if dep.FromFileID != idByPath["index.js"] || dep.ToFileID != idByPath["utils.js"] {
+		t.Errorf("dependency edge = %+v, want index.js(%d) -> utils.js(%d)", dep, idByPath["index.js"], idByPath["utils.js"])
+	}
 	if !dependencyEdgeFound {
 		t.Error("dependency edge index.js -> utils.js was not persisted")
 	}

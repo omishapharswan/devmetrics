@@ -23,9 +23,17 @@ export interface FileMetrics {
   healthScore: number;
 }
 
+export interface Dependency {
+  id: number;
+  scanId: number;
+  fromFileId: number;
+  toFileId: number;
+}
+
 export interface ScanResult {
   scan: Scan;
   files: FileMetrics[];
+  dependencies: Dependency[];
 }
 
 export class ApiError extends Error {
