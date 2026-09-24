@@ -4,12 +4,12 @@ import "time"
 
 // Scan represents one run of the analyzer over a folder.
 type Scan struct {
-	ID              int64     `json:"id"`
-	FolderPath      string    `json:"folderPath"`
-	ScannedAt       time.Time `json:"scannedAt"`
-	TotalFiles      int       `json:"totalFiles"`
-	AvgComplexity   float64   `json:"avgComplexity"`
-	AvgHealthScore  float64   `json:"avgHealthScore"`
+	ID             int64     `json:"id"`
+	FolderPath     string    `json:"folderPath"`
+	ScannedAt      time.Time `json:"scannedAt"`
+	TotalFiles     int       `json:"totalFiles"`
+	AvgComplexity  float64   `json:"avgComplexity"`
+	AvgHealthScore float64   `json:"avgHealthScore"`
 }
 
 // File represents the computed metrics for a single scanned source file.
